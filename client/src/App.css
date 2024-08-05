@@ -40,3 +40,36 @@
 .read-the-docs {
   color: #888;
 }
+
+.tiles {
+  color: rgb(13, 16, 13);
+  font-weight: 700;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  padding: 8;
+  background-color: green;
+}
+
+
+.remove-btn {
+  width: fit-content;
+  text-align: center;
+}
+
+.copy-btn {
+  width: fit-content;
+}
+
+.menu-btn {
+  color: black;
+}
+
+.tile-btns {
+  width: fit-content;
+  height: fit-content;
+}
+
+main {
+  width: 66vw;
+}
