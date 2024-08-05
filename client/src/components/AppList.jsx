@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
-
-const initialItems = [];
+import { useState, useRef, useEffect } from 'react';
+import { Constants } from '../pages/Constants';
+import { LogoutButton } from './LogoutButton';
 
 const fetchFaviconUrl = async (url) => {
     const faviconUrl = new URL('/favicon.ico', url).href;
@@ -13,13 +13,22 @@ const fetchFaviconUrl = async (url) => {
 };
 
 export const AppList = () => {
-    const [items, setItems] = useState(initialItems);
+    const [items, setItems] = useState([]);
     const [draggingIndex, setDraggingIndex] = useState(null);
     const [newTileName, setNewTileName] = useState('');
     const [newTileUrl, setNewTileUrl] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [showMenu, setShowMenu] = useState(null); // Track which tile's menu is open
     const dragStartIndexRef = useRef(null);
+
+    useEffect(() => {
+        const fetchTiles = async () => {
+            const response = await fetch(`${Constants.SERVER_URL}tiles`);
+            const data = await response.json();
+            setItems(data);
+        };
+        fetchTiles();
+    }, []);
 
     const handleDragStart = (index, e) => {
         e.dataTransfer.effectAllowed = 'move'; // Indicate that the action is a move
@@ -44,6 +53,8 @@ export const AppList = () => {
         reorderedItems.splice(index, 0, movedItem);
 
         setItems(reorderedItems);
+        updateTileOrder(reorderedItems);
+
         setDraggingIndex(null);
         dragStartIndexRef.current = null;
     };
@@ -60,21 +71,31 @@ export const AppList = () => {
 
         const faviconUrl = await fetchFaviconUrl(newTileUrl);
 
-        const newItem = {
-            id: `item-${items.length + 1}`, // Generate a new ID
-            content: newTileName.trim(), // Use user input for content
-            favicon: faviconUrl, // Favicon URL
-            url: newTileUrl.trim(), // Store the URL for copying
-        };
+        const response = await fetch(`${Constants.SERVER_URL}tiles`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: newTileName.trim(),
+                url: newTileUrl.trim(),
+                favicon: faviconUrl,
+            }),
+        });
+
+        const newItem = await response.json();
         setItems([...items, newItem]);
         setNewTileName('');
         setNewTileUrl('');
         setShowForm(false);
     };
 
-    const handleRemoveTile = (id) => {
-        const filteredItems = items.filter(item => item.id !== id);
-        setItems(filteredItems);
+    const handleRemoveTile = async (id) => {
+        await fetch(`${Constants.SERVER_URL}tiles/${id}`, {
+            method: 'DELETE',
+        });
+        const updatedItems = items.filter(item => item.id !== id);
+        setItems(updatedItems);
         setShowMenu(null); // Close the menu after removal
     };
 
@@ -89,8 +110,19 @@ export const AppList = () => {
         setShowMenu(showMenu === index ? null : index);
     };
 
+    const updateTileOrder = async (orderedTiles) => {
+        await fetch(`${Constants.SERVER_URL}tiles/order`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderedTiles: orderedTiles.map((item, index) => ({ id: item.id, order: index + 1 })) }),
+        });
+    };
+
     return (
         <>
+        <LogoutButton />
             <h3>Apps Dashboard</h3>
             <button 
                 onClick={() => setShowForm(!showForm)}
