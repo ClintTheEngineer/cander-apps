@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Constants } from '../pages/Constants';
-import { LogoutButton } from './LogoutButton';
+import { Navbar } from './Navbar';
 
 const fetchFaviconUrl = async (url) => {
     const faviconUrl = new URL('/favicon.ico', url).href;
@@ -120,9 +120,14 @@ export const AppList = () => {
         });
     };
 
+    const handleTileClick = (url) => {
+        window.open(url, '_blank'); // Open the URL in a new tab
+    };
+
+
     return (
         <>
-        <LogoutButton />
+        <Navbar />
             <h3>Apps Dashboard</h3>
             <button 
                 onClick={() => setShowForm(!showForm)}
@@ -163,6 +168,7 @@ export const AppList = () => {
                             onDragOver={handleDragOver}
                             onDrop={(e) => handleDrop(index, e)}
                             onDragEnd={handleDragEnd}
+                            onClick={() => handleTileClick(item.url)}
                             style={{
                                 padding: 16,
                                 width: 125,

@@ -48,7 +48,6 @@
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 8px;
   padding: 8;
-  background-color: green;
 }
 
 
@@ -73,3 +72,47 @@
 main {
   width: 66vw;
 }
+
+
+/*  NAV BAR */
+
+nav {
+  background-color: #33333369;
+  color: white;
+  position: fixed; /* Make the navbar stay fixed at the top */
+  top: 0; /* Position it at the top of the page */
+  left: 0;
+  right: 0;
+  display: flex; /* Make the navigation items horizontal */
+  justify-content: space-between; /* Space out the items */
+  padding: 10px 20px; /* Add padding to the navbar */
+}
+
+ul {
+  list-style: none;
+  display: flex; /* Make the list items horizontal */
+  padding-right: 0;
+  margin: 0;
+  cursor: pointer;
+  color: navajowhite;
+}
+
+li {
+  list-style-type: none;
+  margin-right: 50px;
+  color: #ef7015;
+}
+
+li:hover {
+  color: #3984bd;
+}
+
+#login-hdr {
+  color: #2878f5;
+  background-color: #fdbb79c2;
+  width: fit-content;
+  margin-left: 150px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+  /*  NAV BAR */
