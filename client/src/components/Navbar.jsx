@@ -13,10 +13,12 @@ export const Navbar = () => {
     <>
     <nav id="login-nav">
         <ul className="login-list">
-        <Link to='/'><li>Home</li></Link>
-        {!isLoggedIn && <Link to='/register'><li>Register</li></Link>}
-        {!isLoggedIn && <Link to='/login'><li>Sign In</li></Link>}        
-        {isLoggedIn && <li onClick={handleLogout}>Sign Out</li>}
+        <Link to='/'><li className="nav-list">Home</li></Link>
+        {!isLoggedIn && <Link to='/register'><li className="nav-list">Register</li></Link>}
+        {!isLoggedIn && <Link to='/login'><li className="nav-list">Sign In</li></Link>}        
+        
+        {isLoggedIn && <Link to='/password-manager'><li className="nav-list">Password Manager</li></Link>}
+        {isLoggedIn && <li className="nav-list" onClick={handleLogout}>Sign Out</li>}
         </ul>
     </nav>
     </>

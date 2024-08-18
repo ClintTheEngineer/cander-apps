@@ -125,8 +125,7 @@ export const AppList = () => {
         window.open(url, '_blank'); // Open the URL in a new tab
     };
 
-    //https://www.tiktok.com/@thedeslashae/video/7390504523699113258
-
+    
     return (
         <>
         <Navbar />

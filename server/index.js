@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
@@ -9,10 +8,12 @@ const pool = require('./db');
 const app = express();
 const port = process.env.PORT || 8080;
 const secretKey = process.env.SECRET_KEY; 
+const { encrypt, decrypt } = require('./encryption');
 const clientDomain = 'http://localhost:5173';
 
-//const secret = crypto.randomBytes(32).toString('hex'); // Generate a 32-byte (256-bit) random key
+
 app.use(bodyParser.json()); 
+
 
 app.use(cors({
     origin: clientDomain, 
@@ -155,6 +156,99 @@ app.post('/tiles', async (req, res) => {
       res.status(500).send('Error removing tile');
     }
   });
+
+  app.get('/entries', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT id, siteName, url, username FROM entries');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching entries:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/entries/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const result = await pool.query('SELECT * FROM entries WHERE id = $1', [id]);
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Entry not found' });
+      }
+
+      const entry = result.rows[0];
+      const decryptedPassword = decrypt(entry.password, entry.iv);
+      res.json({ ...entry, password: decryptedPassword });
+  } catch (error) {
+      console.error('Error fetching entry:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
+app.post('/entries', async (req, res) => {
+  const { siteName, url, username, password } = req.body;
+
+  if (!siteName || !url || !username || !password) {
+      return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+      const { iv, encryptedData } = encrypt(password);
+      const result = await pool.query(
+          'INSERT INTO entries (siteName, url, username, password, iv) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+          [siteName, url, username, encryptedData, iv]
+      );
+      res.json(result.rows[0]);
+  } catch (error) {
+      console.error('Error inserting entry:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// PUT route to update an existing entry
+app.put('/entries/:id', async (req, res) => {
+  const { id } = req.params;
+  const { siteName, url, username, password } = req.body;
+
+  if (!siteName || !url || !username || !password) {
+      return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+      const { iv, encryptedData } = encrypt(password);
+      const result = await pool.query(
+          'UPDATE entries SET siteName = $1, url = $2, username = $3, password = $4, iv = $5 WHERE id = $6 RETURNING *',
+          [siteName, url, username, encryptedData, iv, id]
+      );
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Entry not found' });
+      }
+      res.json(result.rows[0]);
+  } catch (error) {
+      console.error('Error updating entry:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// DELETE route to delete an existing entry
+app.delete('/entries/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query('DELETE FROM entries WHERE id = $1 RETURNING *', [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Entry not found' });
+        }
+        res.status(204).send(); // No content
+    } catch (error) {
+        console.error('Error deleting entry:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 
 

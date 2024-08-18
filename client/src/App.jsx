@@ -7,6 +7,7 @@ import { Constants } from './pages/Constants';
 import { Register } from './pages/Register';
 import { PrivateRoutes } from './components/PrivateRoutes';
 import { AppList } from './components/AppList';
+import PasswordManager from './pages/PasswordManager';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -23,6 +24,7 @@ function App() {
       <Route path='login' element={<Login setToken={setToken} appName={Constants.APP_NAME} />} />
       <Route path="/" element={<PrivateRoutes />}>
           <Route path="/profile" element={<AppList />} />
+          <Route path='/password-manager' element={<PasswordManager />} />
           </Route>
       </Routes>
      
