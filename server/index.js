@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 const secretKey = process.env.SECRET_KEY; 
 const { encrypt, decrypt } = require('./encryption');
+const { passwordGenerator, generatedPassword } = require('./passwordgenerator');
 const clientDomain = 'http://localhost:5173';
 
 
@@ -249,6 +250,36 @@ app.delete('/entries/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+const randomLength =()=>{
+  return Math.floor(Math.random() * (34 - 12 + 1)+ 12) 
+}
+
+app.get('/test-password', (req, res) => {
+  try {
+  const password = passwordGenerator('yes', 'yes');
+  res.json({ password });
+  } catch (error) {
+      res.status(400).send(error)
+      console.log(error)
+  }    
+})
+
+
+
+app.post('/generate-password', async (req, res) => {
+  try {
+      const randomLengthChoice = 'Y'
+      const specialCharsChoice = 'Y'
+      const userPasswordLength = randomLength();
+      const generatedPassword = passwordGenerator(randomLengthChoice, specialCharsChoice, userPasswordLength);
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json({ generatedPassword });
+  } catch (error) {
+      res.status(401).json({ error: error.message })
+  }
+})
+
 
 
 

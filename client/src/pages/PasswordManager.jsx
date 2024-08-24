@@ -7,6 +7,7 @@ const PasswordManager = () => {
     const [newEntry, setNewEntry] = useState({ siteName: '', url: '', username: '', password: '' });
     const [showPasswords, setShowPasswords] = useState({});
     const [editMode, setEditMode] = useState({});
+    const [randomPassword, setRandomPassword] = useState('');
 
     useEffect(() => {
         fetch(`${Constants.SERVER_URL}entries`)
@@ -30,6 +31,24 @@ const PasswordManager = () => {
         })
         .catch(error => console.error('Error adding entry:', error));
     };
+
+    const handleGeneratePassword = () => {
+        fetch(`${Constants.SERVER_URL}test-password`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setRandomPassword(data.password); // Assuming the response contains the password in data.password
+            setNewEntry(prevEntry => ({
+                ...prevEntry,
+                password: data.password
+            }));
+        })
+        .catch(error => console.error('Error generating password:', error));
+    }
 
     const handleEditEntry = (id, updatedEntry) => {
         fetch(`${Constants.SERVER_URL}entries/${id}`, {
@@ -100,12 +119,39 @@ const PasswordManager = () => {
         handleEditEntry(id, entry);
     };
 
+
+    const handleCopyGeneratedPassword = async () => {
+        try {
+            await navigator.clipboard.writeText(randomPassword);
+            alert('Generated password copied to clipboard');
+        } catch (err) {
+            console.error('Failed to copy generated password:', err);
+        }
+    };
+    
+    
+
+
+
     return (
         <>
             <Navbar />
             <h1>Password Manager</h1>
 
             <div>
+            <aside>
+                    <h2>Generate Random Password:</h2>
+                    <button onClick={handleGeneratePassword}>Generate</button>
+                    {randomPassword && (
+                        <>
+                            <div id='password'>{randomPassword}</div>
+                            {randomPassword && (
+                                <button onClick={handleCopyGeneratedPassword}>Copy</button>
+                            )}
+                        </>
+                    )}
+                </aside>
+
                 <h2>Add New Entry</h2>
                 <input
                     type="text"
