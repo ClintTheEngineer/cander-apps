@@ -3,7 +3,7 @@ import { Constants } from '../pages/Constants';
 import { Navbar } from './Navbar';
 
 const fetchFaviconUrl = async (url) => {
-    const faviconUrl = new URL('/favicon.ico', url).href || new URL('/favicon.png', url).href;
+    const faviconUrl = new URL('/favicon.ico', url).href;
     return new Promise((resolve) => {
         const img = new Image();
         img.src = faviconUrl;
@@ -163,6 +163,7 @@ export const AppList = () => {
             <div className="tiles" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
                 {items.map((item, index) => (
                     <div
+                        className='children-tiles'
                         key={item.id}
                         draggable
                         onDragStart={(e) => handleDragStart(index, e)}
@@ -172,8 +173,8 @@ export const AppList = () => {
                         onClick={() => handleTileClick(item.url)}
                         style={{
                             padding: 16,
-                            width: 125,
-                            height: 125,
+                            width: 225,
+                            height: 225,
                             backgroundColor: '#fff',
                             border: '1px solid #ccc',
                             borderRadius: 4,

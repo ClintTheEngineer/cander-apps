@@ -1,11 +1,12 @@
 export const Constants = {
     SERVER_URL: (() => {
         const currentBaseUrl = window.location.hostname;
-        if (currentBaseUrl === 'canderdb.com') {
-            return new URL('https://cander-db.com');
+        if (currentBaseUrl === 'sample-url.com') {
+            return new URL('https://sample-url.com');
         } else {
             return new URL('http://localhost:8080');
         }
     })(),
-    APP_NAME: 'CanderDB'
+    APP_NAME: 'Cander Apps',
+    CURRENT_YEAR: new Date().getFullYear()
 }

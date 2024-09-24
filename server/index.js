@@ -13,6 +13,7 @@ const { passwordGenerator, generatedPassword } = require('./passwordgenerator');
 const clientDomain = 'http://localhost:5173';
 
 
+
 app.use(bodyParser.json()); 
 
 
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
     next();
   });
+
 
 
 //   REGISTER  NEW USERS

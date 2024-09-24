@@ -76,43 +76,239 @@ main {
 
 /*  NAV BAR */
 
-nav {
-  background-color: #33333369;
+/* Navbar container */
+nav#login-nav {
+  background-color: rgba(51, 51, 51, 0.8); /* Keep the transparency */
   color: white;
-  top: 0; /* Position it at the top of the page */
+  top: 0;
   left: 0;
   right: 0;
-  display: flex; /* Make the navigation items horizontal */
-  justify-content: space-between; /* Space out the items */
-  padding: 10px 20px; /* Add padding to the navbar */
+  display: flex;
+  justify-content: flex-end; /* Align the nav bar content to the right */
+  padding: 15px 20px;
   position: absolute;
+  z-index: 1000;
+  backdrop-filter: blur(10px); /* Adds a subtle blur effect for better contrast */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
 
+/* Navbar list */
 ul.login-list {
   list-style: none;
-  display: flex; /* Make the list items horizontal */
-  padding-right: 0;
-  margin: 0;
+  display: flex;
+  justify-content: flex-end; /* Align the list to the right */
+  align-items: center;
+  gap: 30px; /* Spacing between the nav items */
+  margin: 0 160px 0 0;
+  padding: 0;
   cursor: pointer;
-  color: navajowhite;
 }
 
+/* Navbar items */
 .nav-list {
-  list-style-type: none;
-  margin-right: 50px;
   color: #ef7015;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  position: relative;
 }
 
+
+/* Hover effect */
 .nav-list:hover {
-  color: #3984bd;
+  color: #ffffff;
+  transform: translateY(-3px); /* Add a smooth 'lift' effect on hover */
 }
 
-#login-hdr {
-  color: #2878f5;
-  background-color: #fdbb79c2;
-  width: fit-content;
-  margin-left: 150px;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+/* Underline on hover */
+.nav-list::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #3984bd; /* Line color on hover */
+  transition: width 0.3s ease;
 }
+
+.nav-list:hover::after {
+  width: 100%; /* Line grows to full width on hover */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  nav#login-nav {
+    padding: 10px;
+  }
+
+  ul.login-list {
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center; /* Center for mobile layout */
+  }
+
+  .nav-list {
+    font-size: 16px;
+    margin-right: 0;
+  }
+}
+
+
 
   /*  NAV BAR */
+
+
+
+  /* AUTH CONTAINER   */
+
+  /* Common form container styles */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 50px auto;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Headings */
+.auth-container h1, 
+.auth-container h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Input fields */
+.auth-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.auth-container input:focus {
+  border-color: #888;
+  outline: none;
+}
+
+/* Buttons */
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.auth-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Links */
+.auth-container a {
+  color: #007BFF;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.auth-container a:hover {
+  text-decoration: underline;
+}
+
+/* Error or Status messages */
+.auth-container p {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+
+
+
+
+  /*  AUTH CONTAINER    */
+
+
+
+
+
+
+  /* PasswordManager.css */
+.container {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background: #f4f4f4;
+  min-height: 100vh;
+}
+
+.title {
+  color: #333;
+  text-align: center;
+}
+
+.section {
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(247, 10, 10, 0.806);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.button {
+  padding: 10px 15px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 4px;
+  color: rgb(231, 211, 211);
+  background-color: #007bff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.password-display {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+li {
+  list-style-type: none;
+}
+
+
+  /* PasswordManager.css */

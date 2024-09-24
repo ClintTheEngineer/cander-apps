@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Constants } from './Constants';
+import { Navbar } from '../components/Navbar';
 
 
 export const Register = () => {
@@ -61,35 +62,30 @@ export const Register = () => {
     };
   
     return (
-      <div>
-        <h2 id='register'>Registration</h2>
-        <div id='sign-up-form'> 
-          <input
-            id='email'
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
-            style={{ borderColor: isEmailValid ? 'initial' : 'red' }}
-          />
-          {!isEmailValid && (
-            <p style={{ color: 'red', marginTop: '4px', marginBottom: '0' }}>
-              Invalid email format or blank email
-            </p>
-          )}
+      <>
+      <Navbar />
+      <div className="auth-container">
+            <h2>Register</h2>
+            <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+                style={{ borderColor: isEmailValid ? 'initial' : 'red' }}
+            />
+            {!isEmailValid && <p>Invalid email format</p>}
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleRegistration} disabled={!isEmailValid}>
+                Register
+            </button>
+            <p>{registrationStatus}</p>
         </div>
-        <input
-          id='pswd-register'
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        /><br />
-        <button id='register-btn' onClick={handleRegistration} disabled={!isEmailValid}>
-          Register
-        </button>
-        <p>{registrationStatus}</p>
-      </div>
+        </>
     );
  
 
