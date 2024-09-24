@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navbar } from '../components/Navbar';
-import { Constants } from './Constants';
+import { Constants } from '../utils/Constants';
 
 const PasswordManager = () => {
     const [entries, setEntries] = useState([]);

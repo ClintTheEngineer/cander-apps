@@ -10,6 +10,8 @@ const LandingPage = () => {
   const handleLinkClick = (target) => {
     localStorage.setItem('target', target);
   }
+
+  
   
   return (
     <>
@@ -57,9 +59,6 @@ const LandingPage = () => {
               strong passwords and store login information for all your
               accounts.
             </p>
-            <Link to="/password-manager" className="feature-link">
-              Learn More
-            </Link>
           </div>
           <div className="feature-box">
             <h3>Bookmark Manager</h3>
@@ -68,15 +67,12 @@ const LandingPage = () => {
               drop functionality. Create a customized dashboard of clickable
               tiles.
             </p>
-            <Link to="/apps-dashboard" className="feature-link">
-              Learn More
-            </Link>
           </div>
         </div>
       </section>
 
       <footer className="landing-footer">
-        <p>© {Constants.CURRENT_YEAR} Cander Apps. All rights reserved.</p>
+        <p>© {Constants.CURRENT_YEAR} {Constants.APP_NAME}. All rights reserved.</p>
       </footer>
     </>
   );

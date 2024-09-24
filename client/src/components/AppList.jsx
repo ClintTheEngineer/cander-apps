@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Constants } from '../pages/Constants';
+import { Constants } from '../utils/Constants';
 import { Navbar } from './Navbar';
 
 const fetchFaviconUrl = async (url) => {
@@ -8,7 +8,7 @@ const fetchFaviconUrl = async (url) => {
         const img = new Image();
         img.src = faviconUrl;
         img.onload = () => resolve(faviconUrl);
-        img.onerror = () => resolve(''); // Fallback if favicon not found
+        img.onerror = () => resolve(''); 
     });
 };
 
@@ -18,7 +18,7 @@ export const AppList = () => {
     const [newTileName, setNewTileName] = useState('');
     const [newTileUrl, setNewTileUrl] = useState('');
     const [showForm, setShowForm] = useState(false);
-    const [showMenu, setShowMenu] = useState(null); // Track which tile's menu is open
+    const [showMenu, setShowMenu] = useState(null);
     const dragStartIndexRef = useRef(null);
 
     useEffect(() => {
@@ -31,19 +31,19 @@ export const AppList = () => {
     }, []);
 
     const handleDragStart = (index, e) => {
-        e.dataTransfer.effectAllowed = 'move'; // Indicate that the action is a move
+        e.dataTransfer.effectAllowed = 'move';
         dragStartIndexRef.current = index;
         setDraggingIndex(index);
     };
 
     const handleDragOver = (e) => {
-        e.preventDefault(); // Required to allow dropping
-        e.stopPropagation(); // Prevents bubbling up
+        e.preventDefault(); 
+        e.stopPropagation(); 
     };
 
     const handleDrop = (index, e) => {
-        e.preventDefault(); // Prevent default behavior
-        e.stopPropagation(); // Prevents bubbling up
+        e.preventDefault(); 
+        e.stopPropagation();
 
         const fromIndex = dragStartIndexRef.current;
         if (fromIndex === null || fromIndex === index) return;
@@ -60,7 +60,6 @@ export const AppList = () => {
     };
 
     const handleDragEnd = () => {
-        // Clear the dragging index when drag operation ends
         setDraggingIndex(null);
         dragStartIndexRef.current = null;
     };
@@ -96,7 +95,7 @@ export const AppList = () => {
         });
         const updatedItems = items.filter(item => item.id !== id);
         setItems(updatedItems);
-        setShowMenu(null); // Close the menu after removal
+        setShowMenu(null);
     };
 
     const handleCopyLink = (url) => {
@@ -182,11 +181,11 @@ export const AppList = () => {
                             gridTemplateColumns: '40px 1fr auto',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            marginBottom: 16, // Increased space between rows
+                            marginBottom: 16,
                             cursor: 'move',
                             opacity: draggingIndex === index ? 0.5 : 1,
-                            position: 'relative', // To position the dropdown menu
-                            transition: 'background-color 0.3s', // Smooth transition for hover effect
+                            position: 'relative', 
+                            transition: 'background-color 0.3s', 
                         }}
                     >
                         {item.favicon ? (

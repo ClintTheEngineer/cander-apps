@@ -78,27 +78,27 @@ main {
 
 /* Navbar container */
 nav#login-nav {
-  background-color: rgba(51, 51, 51, 0.8); /* Keep the transparency */
+  background-color: rgba(51, 51, 51, 0.8); 
   color: white;
   top: 0;
   left: 0;
   right: 0;
   display: flex;
-  justify-content: flex-end; /* Align the nav bar content to the right */
+  justify-content: flex-end; 
   padding: 15px 20px;
   position: absolute;
   z-index: 1000;
-  backdrop-filter: blur(10px); /* Adds a subtle blur effect for better contrast */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  backdrop-filter: blur(10px); 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 /* Navbar list */
 ul.login-list {
   list-style: none;
   display: flex;
-  justify-content: flex-end; /* Align the list to the right */
+  justify-content: flex-end; 
   align-items: center;
-  gap: 30px; /* Spacing between the nav items */
+  gap: 30px; 
   margin: 0 160px 0 0;
   padding: 0;
   cursor: pointer;
@@ -118,7 +118,7 @@ ul.login-list {
 /* Hover effect */
 .nav-list:hover {
   color: #ffffff;
-  transform: translateY(-3px); /* Add a smooth 'lift' effect on hover */
+  transform: translateY(-3px);
 }
 
 /* Underline on hover */
@@ -134,7 +134,7 @@ ul.login-list {
 }
 
 .nav-list:hover::after {
-  width: 100%; /* Line grows to full width on hover */
+  width: 100%; 
 }
 
 /* Mobile responsiveness */
@@ -146,7 +146,7 @@ ul.login-list {
   ul.login-list {
     flex-direction: column;
     gap: 15px;
-    justify-content: center; /* Center for mobile layout */
+    justify-content: center; 
   }
 
   .nav-list {
@@ -163,7 +163,7 @@ ul.login-list {
 
   /* AUTH CONTAINER   */
 
-  /* Common form container styles */
+
 .auth-container {
   display: flex;
   flex-direction: column;
@@ -311,4 +311,134 @@ li {
 }
 
 
-  /* PasswordManager.css */
+  /* PasswordManager Styles */
+
+
+
+  /* FEATURE PAGE*/
+
+  .landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem;
+    background-color: #f0f4f7;
+    min-height: 90vh;
+}
+
+.landing-content {
+    flex: 1;
+}
+
+.landing-content h1 {
+    font-size: 3rem;
+    color: #2a4d69;
+    margin-bottom: 1.5rem;
+}
+
+.landing-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+.landings-section {
+    padding: 4rem;
+}
+
+.landings-container {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap; 
+}
+
+.landing-box {
+    position: relative;
+    background-color: #f0f4f7;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 100%; 
+    max-width: 350px; 
+    height: 350px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;    
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    transition: background-color 2.4s ease;
+}
+
+.landing-box:hover {
+    transform: translateY(-3px); 
+    background-color: rgba(0, 128, 0, 0.64);
+  
+}
+.landing-box::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #3984bd;
+  transition: width 0.3s ease;
+}
+
+.landing-box:hover::after {
+  width: 100%; 
+}
+
+.landing-box h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #2a4d69;
+}
+
+.landing-box:hover h3 {
+  color: white;
+}
+
+
+
+.landing-box p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.landing-link {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #4da8da;
+    font-weight: bold;
+}
+
+.landing-link:hover {
+    text-decoration: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .landing-box h3 {
+        font-size: 1.5rem; 
+    }
+
+    .landing-content h1 {
+        font-size: 2.5rem; 
+    }
+
+    .landing-content p {
+        font-size: 1rem; 
+    }
+
+    .landings-section {
+        padding: 2rem;
+    }
+}
+
+
+  /* FEATURE PAGE */
+
