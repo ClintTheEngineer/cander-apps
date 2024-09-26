@@ -16,6 +16,7 @@ export const Navbar = () => {
     localStorage.removeItem('target');
     navigate('/');
   };
+  
   return (
     <>
     <nav id="login-nav">

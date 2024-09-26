@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Constants } from '../utils/Constants';
 import { Navbar } from '../components/Navbar';
+import computer from '../assets/computer.gif';
 
 export const Login = () => {
     const [email, setEmail] = useState('');
@@ -11,13 +12,22 @@ export const Login = () => {
     
     const target = localStorage.getItem('target') || '/profile';  
 
-   
     useEffect(() => {
         if (!target) {
             navigate('/login', { replace: true });
             localStorage.removeItem('target')
         } 
     }, [navigate, target]);
+
+    useEffect(() => {
+        document.body.style.backgroundImage = `url(${computer})`;
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.backgroundSize = "cover"; 
+        return () => {
+            document.body.style.backgroundImage = ""; 
+        };
+    }, []);
+
 
     const handleLogin = async () => {
         try {

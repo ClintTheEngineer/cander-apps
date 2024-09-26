@@ -9,6 +9,8 @@ import { AppList } from './components/AppList';
 import { Profile } from './pages/Profile';
 import PasswordManager from './pages/PasswordManager';
 import LandingPage from './pages/LandingPage';
+import { ForgotPassword } from './pages/ForgotPassword';
+import { ResetPassword } from './pages/ResetPassword';
 
 function App() {
   const [token, setToken] = useState('');
@@ -21,9 +23,11 @@ function App() {
       <Route path='/' exact element={<LandingPage />} />
       <Route path='/register' element={<Register />} />  
       <Route path="*" element={<Navigate to="/" />} /> 
-      <Route path='login' element={<Login token={token} setToken={setToken} appName={Constants.APP_NAME} />} />
-      <Route path='/profile' element={<Profile />} />
+      <Route path='/login' element={<Login token={token} setToken={setToken} appName={Constants.APP_NAME} />} />
+      <Route path='/forgot-password' element={<ForgotPassword />} />
+      <Route path="/reset-password" component={token} element={<ResetPassword />} />
       <Route element={<PrivateRoutes />}>
+          <Route path='/profile' element={<Profile />} />
           <Route path="/apps-dashboard" element={<AppList />} />
           <Route path='/password-manager' element={<PasswordManager />} />
           </Route>

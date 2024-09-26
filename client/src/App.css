@@ -189,6 +189,10 @@ ul.login-list {
 }
 
 /* Input fields */
+.auth-container {
+  background-image: url('./assets/astronaut_trophy.gif');
+}
+
 .auth-container input {
   width: 100%;
   padding: 12px;

@@ -3,7 +3,7 @@ import { Constants } from '../utils/Constants';
 import { Navbar } from './Navbar';
 
 const fetchFaviconUrl = async (url) => {
-    const faviconUrl = new URL('/favicon.ico', url).href;
+    const faviconUrl = new URL('', url).href;
     return new Promise((resolve) => {
         const img = new Image();
         img.src = faviconUrl;
@@ -23,12 +23,27 @@ export const AppList = () => {
 
     useEffect(() => {
         const fetchTiles = async () => {
-            const response = await fetch(`${Constants.SERVER_URL}tiles`);
+            const token = localStorage.getItem('token');     
+            const response = await fetch(`${Constants.SERVER_URL}tiles`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json' 
+                }
+            });
+    
+            if (!response.ok) {
+                console.error('Error fetching tiles:', response.statusText);
+                return;
+            }
+    
             const data = await response.json();
             setItems(data);
         };
+    
         fetchTiles();
     }, []);
+    
 
     const handleDragStart = (index, e) => {
         e.dataTransfer.effectAllowed = 'move';
@@ -67,13 +82,15 @@ export const AppList = () => {
     const handleAddTile = async (e) => {
         e.preventDefault();
         if (!newTileName.trim() || !newTileUrl.trim()) return;
-
+    
         const faviconUrl = await fetchFaviconUrl(newTileUrl);
-
+        const token = localStorage.getItem('token'); 
+    
         const response = await fetch(`${Constants.SERVER_URL}tiles`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
                 content: newTileName.trim(),
@@ -81,22 +98,39 @@ export const AppList = () => {
                 favicon: faviconUrl,
             }),
         });
-
+    
+        if (!response.ok) {
+            console.error('Error adding tile:', response.statusText);
+            return;
+        }
+    
         const newItem = await response.json();
         setItems([...items, newItem]);
         setNewTileName('');
         setNewTileUrl('');
         setShowForm(false);
     };
+    
 
     const handleRemoveTile = async (id) => {
-        await fetch(`${Constants.SERVER_URL}tiles/${id}`, {
+        const token = localStorage.getItem('token'); 
+    
+        const response = await fetch(`${Constants.SERVER_URL}tiles/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
         });
+    
+        if (!response.ok) {
+            console.error('Error removing tile:', response.statusText);
+            return;        }
+    
         const updatedItems = items.filter(item => item.id !== id);
         setItems(updatedItems);
         setShowMenu(null);
     };
+    
 
     const handleCopyLink = (url) => {
         navigator.clipboard.writeText(url).then(
@@ -111,14 +145,28 @@ export const AppList = () => {
     };
 
     const updateTileOrder = async (orderedTiles) => {
-        await fetch(`${Constants.SERVER_URL}tiles/order`, {
+        const token = localStorage.getItem('token'); 
+    
+        const response = await fetch(`${Constants.SERVER_URL}tiles/order`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ orderedTiles: orderedTiles.map((item, index) => ({ id: item.id, order: index + 1 })) }),
+            body: JSON.stringify({
+                orderedTiles: orderedTiles.map((item, index) => ({
+                    id: item.id,
+                    order: index + 1
+                })),
+            }),
         });
+    
+        if (!response.ok) {
+            console.error('Error updating tile order:', response.statusText);            
+            return;
+        }
     };
+    
 
     const handleTileClick = (url) => {
         window.open(url, '_blank'); 

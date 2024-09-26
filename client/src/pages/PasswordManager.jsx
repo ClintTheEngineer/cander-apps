@@ -10,65 +10,130 @@ const PasswordManager = () => {
     const [randomPassword, setRandomPassword] = useState('');
 
     useEffect(() => {
-        fetch(`${Constants.SERVER_URL}entries`)
-            .then(response => response.json())
-            .then(data => setEntries(data))
-            .catch(error => console.error('Error fetching data:', error));
+        const fetchEntries = async () => {
+            const token = localStorage.getItem('token');     
+            try {
+                const response = await fetch(`${Constants.SERVER_URL}entries`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, 
+                        'Content-Type': 'application/json' 
+                    },
+                });    
+                if (!response.ok) {
+                    throw new Error('Error fetching entries: ' + response.statusText);
+                }    
+                const data = await response.json();
+                setEntries(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };    
+        fetchEntries();
     }, []);
+    
 
     const handleAddEntry = () => {
+        const token = localStorage.getItem('token');    
         fetch(`${Constants.SERVER_URL}entries`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newEntry)
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(newEntry),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error adding entry: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             setEntries([...entries, data]);
             setNewEntry({ siteName: '', url: '', username: '', password: '' });
         })
         .catch(error => console.error('Error adding entry:', error));
     };
+    
 
     const handleGeneratePassword = () => {
-        fetch(`${Constants.SERVER_URL}test-password`)
-            .then(response => response.json())
-            .then(data => {
-                setRandomPassword(data.password);
-                setNewEntry(prev => ({ ...prev, password: data.password }));
-            })
-            .catch(error => console.error('Error generating password:', error));
+        const token = localStorage.getItem('token');    
+        fetch(`${Constants.SERVER_URL}test-password`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error generating password: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            setRandomPassword(data.password);
+            setNewEntry(prev => ({ ...prev, password: data.password }));        })
+        .catch(error => console.error('Error generating password:', error));
     };
+    
 
     const handleEditEntry = (id, updatedEntry) => {
+        const token = localStorage.getItem('token');    
         fetch(`${Constants.SERVER_URL}entries/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedEntry)
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(updatedEntry),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error updating entry: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             setEntries(entries.map(entry => (entry.id === id ? data : entry)));
             setEditMode({ ...editMode, [id]: false });
         })
         .catch(error => console.error('Error updating entry:', error));
     };
+    
 
     const handleDeleteEntry = (id) => {
-        fetch(`${Constants.SERVER_URL}entries/${id}`, { method: 'DELETE' })
-            .then(() => {
-                setEntries(entries.filter(entry => entry.id !== id));
-            })
-            .catch(error => console.error('Error deleting entry:', error));
+        const token = localStorage.getItem('token');    
+        fetch(`${Constants.SERVER_URL}entries/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        .then(() => {
+            setEntries(entries.filter(entry => entry.id !== id));
+        })
+        .catch(error => console.error('Error deleting entry:', error));
     };
+    
 
     const handleShowPassword = async (id) => {
         const shouldShow = !showPasswords[id];
         setShowPasswords(prev => ({ ...prev, [id]: shouldShow }));
     
         if (shouldShow) {
+            const token = localStorage.getItem('token');
+    
             try {
-                const response = await fetch(`${Constants.SERVER_URL}entries/${id}`);
+                const response = await fetch(`${Constants.SERVER_URL}entries/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to fetch decrypted password: ' + response.statusText);
+                }
+    
                 const data = await response.json();
                 setEntries(prevEntries => prevEntries.map(entry =>
                     entry.id === id ? { ...entry, password: data.password } : entry
@@ -78,6 +143,7 @@ const PasswordManager = () => {
             }
         }
     };
+    
 
     return (
         <div className="container">
