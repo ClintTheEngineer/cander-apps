@@ -14,23 +14,17 @@ const clientDomain = process.env.CLIENT_DOMAIN;
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); 
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+// CORS configuration
+const corsOptions = {
+  origin: process.env.CLIENT_DOMAIN || '*', 
+  methods: 'GET, POST, PUT, DELETE, OPTIONS',
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+  credentials: true 
+};
 
-
-app.use(cors())
-app.use(express.json())
-
-
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); 
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-    next();
-  });
+// Use CORS middleware
+app.use(cors(corsOptions));
+app.use(express.json());
 
 
   const authenticateToken = (req, res, next) => {
