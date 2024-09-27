@@ -17,7 +17,7 @@ const crypto = require('crypto');
 app.use(bodyParser.json()); 
 
 app.use(cors({
-    origin: clientDomain, 
+    origin: clientDomain || `${clientDomain}/login`, 
     credentials: true 
   }));
 
