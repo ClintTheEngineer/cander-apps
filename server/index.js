@@ -25,18 +25,7 @@ app.use((req, res, next) => {
   });
 
 
-  const path = require('path');
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'dist'))); 
-
-// Catch-all handler for any requests that don't match a route
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html')); 
-});
-
-
-  const authenticateToken = (req, res, next) => {
+   const authenticateToken = (req, res, next) => {
     const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1]; 
 
     if (!token) {
