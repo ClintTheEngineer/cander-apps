@@ -244,12 +244,23 @@ const PasswordManager = () => {
                                 <>
                                     <p>Site Name: <strong>{entry.sitename}</strong></p>
                                     <p>URL: <strong>{entry.url}</strong></p>
-                                    <p>Username: <strong>{entry.username}</strong></p>
+                                    <p>Username/E-mail: <strong>{entry.username}</strong></p>
                                     <p>Password: <strong>{showPasswords[entry.id] ? entry.password : '••••••••'}</strong></p>
                                     <button className="button" onClick={() => setEditMode({ ...editMode, [entry.id]: entry })}>Edit</button>
                                     <button className="button" onClick={() => handleShowPassword(entry.id)}>
                                         {showPasswords[entry.id] ? 'Hide' : 'Show'} Password
                                     </button>
+                                    {showPasswords[entry.id] && ( 
+        <button 
+            className="button" 
+            onClick={() => {
+                navigator.clipboard.writeText(entry.password);
+                alert('Password copied to clipboard!');
+            }}
+        >
+            Copy Password
+        </button>
+    )}
                                     <button className="button" onClick={() => handleDeleteEntry(entry.id)}>Delete</button>
                                 </>
                             )}

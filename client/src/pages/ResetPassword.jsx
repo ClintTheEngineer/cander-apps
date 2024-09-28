@@ -110,7 +110,7 @@ export const ResetPassword = () => {
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
       <button onClick={handleResetPassword}>Reset Password</button>
-      {message && <p>{message}</p>}
+      {<p>{message}</p>}
     </div>
     </>
   );

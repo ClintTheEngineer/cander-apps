@@ -13,6 +13,7 @@ const { passwordGenerator, generatedPassword } = require('./passwordgenerator');
 const clientDomain = process.env.CLIENT_DOMAIN;
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const rateLimit = require('express-rate-limit');
 
 app.use(bodyParser.json()); 
 
@@ -40,6 +41,12 @@ app.use((req, res, next) => {
         next(); 
     });
 };
+
+const apiRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 5, 
+  message: { error: 'Too many requests, please try again later.' }
+});
 
 
 //   REGISTER  NEW USERS
@@ -86,7 +93,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
 
 
 // LOGIN ROUTE
-app.post('/login', async (req, res) => {
+app.post('/login', apiRateLimiter, async (req, res) => {
     try {
     const { email, password } = req.body;
     const user = await pool.query (
@@ -310,7 +317,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Forgot Password Route
-app.post('/forgot-password', async (req, res) => {
+app.post('/forgot-password', apiRateLimiter, async (req, res) => {
   const { email } = req.body;
   try {
       const user = await pool.query('SELECT * FROM cander_apps_users WHERE email = $1', [email]);

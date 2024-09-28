@@ -4,7 +4,7 @@ export const Constants = {
         if (currentBaseUrl === 'https://cander-apps.onrender.com') {
             return new URL('https://cander-apps-server.onrender.com');
         } else {
-            return new URL('https://cander-apps-server.onrender.com');
+            return new URL('http://localhost:8080');
         }
     })(),
     APP_NAME: 'Cander Apps',
